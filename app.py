@@ -7,32 +7,56 @@ import json
 
 app=Flask(__name__)
 api= Api(app)
+
+#creating a database connection object from databaseOps class
 dbops = db.databaseOps()
 
-labels = [
-    'JAN', 'FEB', 'MAR', 'APR',
-    'MAY', 'JUN', 'JUL', 'AUG',
-    'SEP', 'OCT', 'NOV', 'DEC'
-]
 
-values = [
-    967.67, 1190.89, 1079.75, 1349.19,
-    2328.91, 2504.28, 2873.83, 4764.87,
-    4349.29, 6458.30, 9907, 16297
-]
+labels = ['Positive','Negative','Neutral']
 
-colors = [
-    "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-    "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-    "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
+colors = ["#F7464A", "#46BFBD", "#FDB45C"]
 
 
 class Dashboard(Resource): 
 	def get(self):
-		pie_labels = labels
-		pie_values = values
+		
+		#gettting the trending tweets from mongo-atlas for a country
+		#trend is json with country, trend and tweet volume
+		#obtaining the top 10 trending topics in canada
+
+		trends = dbops.get_trends_by_country("canada", order= -1,  count = 10)
+		# print(trends)
+		# print("-------------------------------------")
+
+		# generating the value list for all the 10 piecharts by calculating the average sentiment
+		value_list = []
+		for eachtrend in trends:
+			
+			sentiment_dict = {}
+			tweets = dbops.get_tweets_by_trend(eachtrend["trend"])
+			#picking positive tweets from tweets 
+			ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
+
+			ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+			#percentage of positive tweets 
+			sentiment_dict['positive'] = round(100*len(ptweets)/len(tweets),2)
+			sentiment_dict['negative'] = round(100*len(ntweets)/len(tweets),2)
+			sentiment_dict['neutral'] = round(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets),2)
+
+			# print("Positive tweets percentage: {} %".format(postive_perc)) 
+			# # picking negative tweets from tweets 
+	
+			# # percentage of negative tweets 
+			# print("Negative tweets percentage: {} %".format(negative_perc)) 
+			# # percentage of neutral tweets 
+			# print("Neutral tweets percentage: {} %".format(neutral_perc)) 
+
+			value_list.append(sentiment_dict)
+			print(sentiment_dict)
+
+		print(value_list)
 		headers = {'Content-Type': 'text/html'}
-		return make_response(render_template('dashboard.html', title='test', max=17000, set=zip(values, labels, colors)))
+		return make_response(render_template('charts.html', title='Sentiment Analyzer', max=17000,trends=trends,label=labels,color=colors,values=value_list))
 		
  
 class barc(Resource):
@@ -56,7 +80,7 @@ class get_all_trends(Resource):
 
 class get_trends(Resource):
 	def get(self,country):
-		return dbops.get_trends(country)
+		return dbops.get_trends_by_country(country)
 
 
 api.add_resource(Dashboard, "/")
@@ -64,6 +88,7 @@ api.add_resource(barc, "/bar")
 api.add_resource(Multi,'/multi/<int:num>')
 api.add_resource(getlocations,'/locations')
 api.add_resource(get_all_trends,'/alltrends')
+api.add_resource(get_trends,'/countrytrends/<string:country>')
 
 if __name__ == '__main__':
 	app.run(debug=True)

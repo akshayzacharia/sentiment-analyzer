@@ -170,41 +170,15 @@ def main():
 			print("Not able to insert tweet, for non english")
 			trend_collection.remove({"trend":eachtrend['trend']})
 			continue
-	
-	#tweet_collection.create_index([("id", pymongo.ASCENDING)],unique = True) # make sure the collected tweets are unique 
-			
-	# picking positive tweets from tweets 
-	#ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive'] 
-	# percentage of positive tweets 
-	# print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets))) 
-	# # picking negative tweets from tweets 
-	# ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
-	# # percentage of negative tweets 
-	# print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets))) 
-	# # percentage of neutral tweets 
-	# print("Neutral tweets percentage: {} %".format(100*(len(tweets) - len(ntweets) - len(ptweets))/len(tweets))) 
 
-	# # printing first 5 positive tweets 
-	# print("\n\nPositive tweets:")
-	# for tweet in ptweets[:10]: 
-	# 	print(tweet['text'])
-
-	# # printing first 5 negative tweets 
-	# print("\n\nNegative tweets:")
-	# for tweet in ntweets[:10]:
-	# 	print(tweet['text'])
-
-	# print("\n\nTweets by location")
-	# #woeid = input()
-	#woeid of canada #23424775	
 
 if __name__ == "__main__": 
-	main()
-	# schedule.every().day.at("02:50").do(main)
-	# print("job scheduled!")
-	# # calling main() function
-	# while True:
-	# 	schedule.run_pending()
-	# 	print("sleeping now!, will wake up at 12am")
-	# 	time.sleep(60) # wait 
+	# main()
+	schedule.every().day.at("00:00").do(main)
+	print("job scheduled!")
+	# calling main() function
+	while True:
+		schedule.run_pending()
+		print("sleeping now!, will wake up at 12am")
+		time.sleep(60) # wait 
 	

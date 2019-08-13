@@ -26,12 +26,19 @@ class databaseOps(object):
 
 	def get_all_trends(self):
 
-		trendcollection = [x for x in self.db.trend_collection.find({}, {"_id":0})]
-		return trendcollection
+		trend_documents = [x for x in self.db.trend_collection.find({}, {"_id":0})]
+		return trend_documents
 
 
-	def get_trends(self,country):
+	def get_trends_by_country(self, country, order = 1, count = 50):
 
-		trendcollection = [x for x in self.db.trend_collection.find({}, {"_id":0})]
-		return trendcollection	
+		trend_documents = [x for x in self.db.trend_collection.find({"country" : country}, {"_id":0,"country":0}).limit( count ).sort([ ("tweet_vol", order) ] )]
+		return trend_documents	
+
+
+	def get_tweets_by_trend(self,trend):
+		#function to get tweets for a specific trend
+		tweet_documents = [x for x in self.db.tweet_collection.find({"trend" : trend}, {"_id":0})]
+		return tweet_documents	
+
 		
