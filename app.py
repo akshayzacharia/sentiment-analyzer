@@ -3,6 +3,7 @@ from flask_restful import Resource,Api
 import databaseOps as db
 import pymongo
 from subprocess import Popen
+import subprocess
 from pymongo import MongoClient,errors
 import json
 
@@ -10,7 +11,8 @@ app=Flask(__name__)
 api= Api(app)
 
 # running the engine script to fetch data from Twitter at 12am everyday
-Popen('python engine.py')
+Popen(["python","engine.py","get_token","60"], stdout=subprocess.PIPE)
+
 #creating a database connection object from databaseOps class
 dbops = db.databaseOps()
 
