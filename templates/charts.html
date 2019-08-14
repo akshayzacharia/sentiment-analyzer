@@ -361,7 +361,7 @@
 	var barChartData = {
 			labels: bar_labels,
 			datasets: [{
-				//label: 'Dataset 1',
+				label: 'data1',
 				backgroundColor: [
 						window.chartColors.red,
 						window.chartColors.orange,
@@ -389,7 +389,16 @@
 				data: barChartData,
 				options: {
 					responsive: true,
-					
+					legend: {
+        				display: false
+    				},
+    				tooltips: {
+        				callbacks: {
+           					label: function(tooltipItem) {
+                 			 return tooltipItem.yLabel;
+           					}
+        				}
+    				},
 					title: {
 						display: false,
 						text: 'Chart.js Bar Chart'
