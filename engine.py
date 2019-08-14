@@ -128,7 +128,7 @@ class TwitterClient(object):
 
 def main(): 
 	# creating object of TwitterClient Class 
-	print("Executing the main job")
+	print("Engine :> Executing the main job")
 	api = TwitterClient()
 	try: 
 		client = MongoClient("mongodb+srv://datapgmuser:datapgmpsswd@mflix-1ez8y.mongodb.net/test?retryWrites=true&w=majority")
@@ -175,10 +175,10 @@ def main():
 if __name__ == "__main__": 
 	# main()
 	schedule.every().day.at("00:00").do(main)
-	print("job scheduled!")
+	print("Engine :> job scheduled!")
 	# calling main() function
 	while True:
 		schedule.run_pending()
-		print("sleeping now!, will wake up at 12am")
+		print("Engine :> sleeping now!, will wake up at 12am")
 		time.sleep(60) # wait 
 	

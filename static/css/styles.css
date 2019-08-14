@@ -1,8 +1,8 @@
 body {
-  background: #212121;
+  background: #222;
   padding-top: 60px;
   font-size: 14px;
-  color: #444444;
+  color: #222;
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 p {
@@ -12,7 +12,7 @@ a, a:hover, a:focus {
   color: #30a5ff; }
 
 h1, h2, h3, h4, h5, h6 {
-  color: #444444; }
+  color: #e50000; }
 
 h1 {
   font-weight: 300;
@@ -862,8 +862,13 @@ a.label:hover, a.label:focus {
   font-weight: 600;
   margin-bottom: 15px; }
 
+.breadcrumb {
+  border-radius: 0;
+  padding: 10px 15px 10px 15px;
+  background: #e9ecf2;
+  margin: 0; }
+
 h1.page-header {
-  color: #f44336;
   margin-top: 20px;
   border-bottom: 0; }
 
