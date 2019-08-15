@@ -66,11 +66,21 @@ class get_trends(Resource):
 	def get(self,country):
 		return dbops.get_trends_by_country(country)
 
+class get_tweets_by_trend(Resource):
+	def get(self,trend):
+		return dbops.get_tweets_by_trend(trend)
+
+class get_tweets_by_trend_limited(Resource):
+	def get(self,trend,limit):
+		return dbops.get_tweets_by_trend(trend,limit)
+
 
 api.add_resource(Dashboard, "/")
 api.add_resource(getlocations,'/locations')
-api.add_resource(get_all_trends,'/alltrends')
-api.add_resource(get_trends,'/countrytrends/<string:country>')
+api.add_resource(get_all_trends,'/all_trends')
+api.add_resource(get_trends,'/country_trends/<string:country>')
+api.add_resource(get_tweets_by_trend, '/tweets_by_trend/<string:trend>')
+api.add_resource(get_tweets_by_trend_limited, '/tweets_by_trend_limited/<string:trend>/<int:limit>')
 
 if __name__ == '__main__':
 	app.run(debug=True)

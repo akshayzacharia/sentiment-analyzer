@@ -32,13 +32,15 @@ class databaseOps(object):
 
 	def get_trends_by_country(self, country, order = 1, count = 50):
 
-		trend_documents = [x for x in self.db.trend_collection.find({"country" : country}, {"_id":0,"country":0}).limit( count ).sort([ ("tweet_vol", order) ] )]
+		trend_documents = [x for x in self.db.trend_collection.find({"country" : country}, {"country":0,"_id":0}).limit( count ).sort([ ("tweet_vol", order) ] )]
 		return trend_documents	
 
 
-	def get_tweets_by_trend(self,trend):
+	def get_tweets_by_trend(self,trend, limit = 10000):
 		#function to get tweets for a specific trend
-		tweet_documents = [x for x in self.db.tweet_collection.find({"trend" : trend}, {"_id":0})]
-		return tweet_documents	
+		tweet_documents = [x for x in self.db.tweet_collection.find({"trend" : trend},{"_id":0}).limit( limit )]
+		return tweet_documents
+
+	
 
 		
