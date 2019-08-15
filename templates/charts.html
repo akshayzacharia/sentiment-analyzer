@@ -47,8 +47,9 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>visua1</h4>
-						<div class="easypiechart" id="easypiechart-teal" data-percent="56" ><span class="percent">56%</span></div>
+
+						<h4>Top Trending Tweet</h4>
+						<p ><span id="easy_pie1" class="percent">56%</span></p>
 
 					</div>
 				</div>
@@ -56,24 +57,24 @@
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>visua1</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="92" ><span class="percent">92%</span></div>
+						<h4>Most Positive Trend</h4>
+						<p ><span id="easy_pie2" class="percent">92%</span></p>
 					</div>
 				</div>
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>visua1</h4>
-						<div class="easypiechart" id="easypiechart-orange" data-percent="65" ><span class="percent">65%</span></div>
+						<h4>Most Negative Trend</h4>
+						<p><span id="easy_pie3" class="percent">65%</span></p>
 					</div>
 				</div>
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel">
-						<h4>visua1</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="27" ><span class="percent">27%</span></div>
+						<h4>Most Neutral Trend</h4>
+						<p><span id="easy_pie4" class="percent">27%</span></p>
 					</div>
 				</div>
 			</div>
@@ -100,6 +101,25 @@
 				</div>
 			</div>
 		</div><!--/.row-->		
+
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading" style="font-weight: bold;">
+						Sentiment Analysis of Tweets 
+						
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body">
+						<div class="canvas-wrapper">
+							<p style="text-align: center;">Visualizations, below analyzes the sentiments of tweets for each of the above Trends and is categorised into postive, negative and neutral sentiments</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+
+
 		
 		<div class="row">
 			<div class="col-md-4">
@@ -310,6 +330,11 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="col-md-4">
+				
+				<div id="twitter-feed"></div>
+			</div>
 			<div class="col-sm-12">
 				<p class="back-link">Project powered by <a href="">Azure</a></p>
 			</div>
@@ -410,6 +435,20 @@
 
     pie_values = '{{values|tojson}}';
 	var pie_values_parsed = JSON.parse(pie_values);
+	var count;
+	var positive = 0;
+	var negative = 0;
+	var neutral = 0;
+	var neutral_pos = 0;
+	var positive_pos = 0;
+	var negative_pos = 0;
+
+	 for(count = 0; count < pie_values_parsed.length; count++) {
+               
+	 			if( pie_values_parsed[count].positive >= positive ){ positive = pie_values_parsed[count].positive; positive_pos = count;}
+	 			if( pie_values_parsed[count].negative >= negative ){ negative = pie_values_parsed[count].negative; negative_pos = count;}
+	 			if( pie_values_parsed[count].neutral >= neutral ){ neutral = pie_values_parsed[count].neutral; neutral_pos = count;}
+            }
 	
 	var pieData1 = {
 			type: 'pie',
@@ -653,6 +692,23 @@
 	var chart2 = document.getElementById("pie-chart1").getContext("2d");
 	window.myPie = new Chart(chart2, pieData1);
 	//<span id="pie_title1"> Pie chart 2</span>
+	// alert(pie_values_parsed[positive_pos].positive);
+	// alert(pie_values_parsed[negative_pos].negative);
+	// alert(pie_values_parsed[negative_pos].negative);
+
+	document.getElementById("easy_pie1").textContent=parsed[0].trend;
+	// document.getElementById('easypiechart-teal').setAttribute('data-percent', Math.round(pie_values_parsed[0].positive));
+
+	document.getElementById("easy_pie2").textContent=parsed[positive_pos].trend;
+	// document.getElementById('easypiechart-blue').setAttribute('data-percent', Math.round(pie_values_parsed[positive_pos].positive));
+
+	document.getElementById("easy_pie3").textContent=parsed[negative_pos].trend;
+	// document.getElementById('easypiechart-orange').setAttribute('data-percent', Math.round(pie_values_parsed[negative_pos].negative));
+
+	document.getElementById("easy_pie4").textContent=parsed[neutral_pos].trend;
+	// document.getElementById('easypiechart-red').setAttribute('data-percent', Math.round(pie_values_parsed[neutral_pos].neutral));
+
+
 	document.getElementById("pie_title1").textContent=parsed[0].trend;
 
 	document.getElementById("search1").onclick = function() {
